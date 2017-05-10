@@ -10,6 +10,7 @@ var forEach = require('lodash').forEach;
 var SwaggerParser = require('swagger-parser');
 var jsf = require('./lib/jsfConfig.js');
 var requireAllProperties = require('./lib/utils/helpers.js').requireAllProperties;
+const SwaggerDataGenerator = require('./lib/sdg.js');
 
 // grab expected user input
 var parser = new ArgumentParser({
@@ -22,15 +23,20 @@ parser.addArgument(['swagger-input'], { help: 'Input Swagger file' });
 parser.addArgument(['json-output'], { help: 'Output file for generated mock data' });
 args = parser.parseArgs(process.arguments);
 
-SwaggerParser.parse(args['swagger-input'])
 
-  // parse the data and make sure all the properties are required.
-  // they need to be required so JSF creates mock data for all properties
-  .then(successfulParse)
-  .catch(unSuccessfulParse)
+const sdg = new SwaggerDataGenerator(args['swagger-input']);
 
-  // make sure there are not any references in the definitions and create the mock data
-  .then(dereferencedSuccess);
+sdg.build()
+  .then(() => saveOutput(sdg.generateMock()))
+// SwaggerParser.parse(args['swagger-input'])
+
+//   // parse the data and make sure all the properties are required.
+//   // they need to be required so JSF creates mock data for all properties
+//   .then(successfulParse)
+//   .catch(unSuccessfulParse)
+
+//   // make sure there are not any references in the definitions and create the mock data
+//   .then(dereferencedSuccess);
 
 // *******************************************************
 // Helper Functions
@@ -109,4 +115,3 @@ function saveOutput(generatedData) {
       });
   }
 }
-

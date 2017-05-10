@@ -1,0 +1,31 @@
+{
+	"prescription": {
+		"prescription_id": 7662954,
+		"medication_name": "commodo dolore Lorem in",
+		"prescribing_doctor": "eu",
+		"dosage": "commodo dolor irure",
+		"quantity": 18446334,
+		"instructions": "ad ",
+		"number_of_refills": 25613546,
+		"date_filled": "occaecat ut",
+		"expiration_date": "reprehenderit cillum",
+		"customer": {
+			"first_name": "nulla quis fugiat",
+			"last_name": "nisi",
+			"street": "pariatur anim",
+			"city": "aliquip nulla velit",
+			"state": "officia do dolor fugiat proident",
+			"phone_number": "minim",
+			"date_of_birth": "in"
+		}
+	},
+	"customer": {
+		"first_name": "nisi aliqua",
+		"last_name": "tempor",
+		"street": "in",
+		"city": "dolore officia veniam commodo",
+		"state": "cupidatat",
+		"phone_number": "laboris minim elit qui",
+		"date_of_birth": "fugiat sunt"
+	}
+}

@@ -13,9 +13,9 @@ module.exports = {
         "es6": false,
         "browser": false
     },
-    "extends": "airbnb",
+    "extends": "eslint:recommended",
     "parserOptions": {
-        "ecmaVersion": 5,
+        "ecmaVersion": 6,
         "sourceType": "module",
         "ecmaFeatures": {
             "jsx": false
@@ -31,6 +31,8 @@ module.exports = {
         "before": true,
         "beforeEach": true,
         "after": true,
-        "afterEach": true
+        "afterEach": true,
+        "module": true,
+        "process": true
     }
 };
