@@ -9,7 +9,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/booknds/swagger-data-generator.git"
+    "url": "git+https://github.com/EricHenry/swagger-data-generator.git"
   },
   "keywords": [
     "swagger",
@@ -22,27 +22,25 @@
   "author": "Eric Henry Correia",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/booknds/swagger-data-generator/issues"
+    "url": "https://github.com/EricHenry/swagger-data-generator/issues"
   },
-  "homepage": "https://github.com/booknds/swagger-data-generator#readme",
+  "homepage": "https://github.com/EricHenry/swagger-data-generator#readme",
+  "bin": {
+    "sdg": "./index.js"
+  },
   "dependencies": {
+    "@types/faker": "4.1.0",
+    "@types/lodash": "4.14.64",
+    "@types/node": "7.0.18",
     "argparse": "^1.0.9",
     "faker": "4.1.0",
     "json-schema-faker": "^0.3.1",
     "lodash": "^4.11.1",
     "swagger-parser": "^3.4.1"
   },
-  "bin": {
-    "sdg": "./index.js"
-  },
   "devDependencies": {
     "ava": "^0.14.0",
-    "eslint": "^2.8.0",
-    "eslint-config-airbnb": "^8.0.0",
-    "eslint-plugin-import": "^1.6.0",
-    "eslint-plugin-jsx": "0.0.2",
-    "eslint-plugin-jsx-a11y": "^1.0.3",
-    "eslint-plugin-react": "^5.0.1"
+    "typescript": "2.3.2"
   },
   "ava": {
     "files": [

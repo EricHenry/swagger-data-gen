@@ -1,7 +1,6 @@
 const SwaggerParser = require('swagger-parser');
 const jsf = require('json-schema-faker');
-const { difference } = require('lodash');
-const generators = require('./generators');
+const generators = require('./formatters');
 const middleware = require('./middleware');
 const { configure, generateMock } = require('./utils');
 
@@ -124,7 +123,8 @@ class SwaggerDataGenerator {
   }
 
   /**
-   * Add formatters,
+   * Bundle the API,
+   * add / remove middleware and formatters based on config.
    *
    * @param {object} [config] -
    * @returns {Promise}       -
@@ -164,7 +164,7 @@ class SwaggerDataGenerator {
     return Object
       .keys(this._parsedFile.definitions)
       .reduce((mockData, def) => {
-        mockData[def] = generateMock(this._parsedFile.definitions[def], options);
+        mockData[def] = SwaggerDataGenerator.generateMocks(this._parsedFile.definitions[def]);
         return mockData;
       }, {});
   }
@@ -180,7 +180,7 @@ class SwaggerDataGenerator {
    * @memberOf SwaggerDataGenerator
    */
   static generateMocks(schema) {
-    return generateMock(jsf, schema);
+    return generateMock(schema, jsf);
   }
 }
 

@@ -6,7 +6,7 @@
 const fs = require('fs');
 const readline = require('readline');
 const ArgumentParser = require('argparse').ArgumentParser;
-const SwaggerDataGenerator = require('./lib/sdg.js');
+const SwaggerDataGenerator = require('./src/sdg.js');
 
 // grab expected user input
 const parser = new ArgumentParser({

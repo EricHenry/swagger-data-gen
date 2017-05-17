@@ -1,0 +1,31 @@
+{
+	"prescription": {
+		"prescription_id": -43632541,
+		"medication_name": "ex consequat",
+		"prescribing_doctor": "reprehenderit",
+		"dosage": "http://lorempixel.com/640/480/nightlife",
+		"quantity": -57736931,
+		"instructions": "Ut consequat Duis anim ipsum",
+		"number_of_refills": 47852652,
+		"date_filled": "Wed May 17 2017 22:43:22 GMT-0400 (EDT)",
+		"expiration_date": "Thu May 18 2017 06:49:58 GMT-0400 (EDT)",
+		"customer": {
+			"first_name": "Elna",
+			"last_name": "Macejkovic",
+			"street": "ut labore",
+			"city": "Port Willstad",
+			"state": "Massachusetts",
+			"phone_number": "595.162.3826 x34404",
+			"date_of_birth": "Thu May 18 2017 03:59:52 GMT-0400 (EDT)"
+		}
+	},
+	"customer": {
+		"first_name": "Genoveva",
+		"last_name": "Ferry",
+		"street": "sunt exercitati",
+		"city": "Kohlerstad",
+		"state": "California",
+		"phone_number": "876.875.7156 x5401",
+		"date_of_birth": "Wed May 17 2017 21:43:07 GMT-0400 (EDT)"
+	}
+}
