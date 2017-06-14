@@ -1,0 +1,37 @@
+{
+  "compilerOptions": {
+    "outDir": "./dist",        // path to output directory
+    "baseUrl": ".",
+    "paths": {
+      "*": [
+          "./src/types/*"
+      ]
+    },
+    "sourceMap": true,          // allow sourcemap support
+    "declaration": true,
+    "strictNullChecks": true,   // enable strict null checks as a best practice
+    "module": "commonjs",            // specifiy module code generation
+    "target": "es5",            // specify ECMAScript target version
+    "removeComments": false,
+    "preserveConstEnums": true,
+    "noImplicitAny": true,
+    "noImplicitReturns": true,
+    "noImplicitThis": true,
+    "suppressImplicitAnyIndexErrors": true,
+    "moduleResolution": "node",
+    "typeRoots": ["./node_modules/@types"],
+    "lib": [
+      "es5",
+      "es2015",
+      "es2015.iterable",
+      "es2015.collection",
+      "es2015.promise",
+      "es2016.array.include",
+      "dom"
+    ]
+  },
+  "include": [
+    "./index.ts",
+    "./src/**/*"
+  ]
+}
