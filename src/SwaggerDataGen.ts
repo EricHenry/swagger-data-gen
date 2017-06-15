@@ -33,7 +33,7 @@ const CORE_FORMATTERS: FormatterDescription[] = [formatters.binary, formatters.b
  *
  * @class SwaggerDataGenerator
  */
-export class SwaggerDataGenerator {
+export class SwaggerDataGen {
   private _pathToFile: string;
   private _parsedFile: SwaggerObject;
   private _middleware: SDGMiddleware[];
@@ -178,7 +178,7 @@ export class SwaggerDataGenerator {
     return Object
       .keys(this._parsedFile.definitions)
       .reduce((mockData, def) => {
-        mockData[def] = SwaggerDataGenerator.generateMockData(this._parsedFile.definitions[def]);
+        mockData[def] = SwaggerDataGen.generateMockData(this._parsedFile.definitions[def]);
         return mockData;
       }, {});
   }

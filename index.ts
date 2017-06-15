@@ -5,8 +5,7 @@
 import * as fs from 'fs';
 import * as readline from 'readline';
 import { ArgumentParser } from 'argparse';
-// const { ArgumentParser } = require('argparse');
-import { SwaggerDataGenerator } from './src/SwaggerDataGenerator';
+import { SwaggerDataGen } from './src/SwaggerDataGen';
 
 // grab expected user input
 const parser = new ArgumentParser({
@@ -14,16 +13,17 @@ const parser = new ArgumentParser({
   description: 'Swagger Data Generator generates mock data from Swagger files.'
 });
 let args: string[];
+
 parser.addArgument(['-y'], { help: 'Always overwrite output file (do not ask to overwrite)', action: 'storeTrue', dest: 'force-yes' });
 parser.addArgument(['swagger-input'], { help: 'Input Swagger file' });
 parser.addArgument(['json-output'], { help: 'Output file for generated mock data' });
 args = parser.parseArgs();
 
-const sdg = new SwaggerDataGenerator(args['swagger-input']);
+const swaggerDataGen = new SwaggerDataGen(args['swagger-input']);
 
-sdg
+swaggerDataGen
   .run()
-  .then(() => saveOutput(sdg.generateMockData()));
+  .then(() => saveOutput(swaggerDataGen.generateMockData()));
 
 /**
  * saveOutput - Verify output path and save file

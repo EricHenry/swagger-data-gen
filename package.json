@@ -1,9 +1,9 @@
 {
-  "name": "swagger-data-generator",
-  "version": "0.1.0-beta.7",
+  "name": "swagger-data-gen",
+  "version": "0.2.0-beta.0",
   "description": "Generate mock data for a swagger document.",
-  "main": "dist/src/SwaggerDataGenerator",
-  "types": "lib/index",
+  "main": "dist/src/SwaggerDataGen",
+  "types": "dist/src/index",
   "scripts": {
     "test": "ava",
     "build": "tsc -p .",
@@ -13,12 +13,14 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/EricHenry/swagger-data-generator.git"
+    "url": "git+https://github.com/EricHenry/swagger-data-gen.git"
   },
   "keywords": [
     "swagger",
     "mock",
+    "fake",
     "data",
+    "definition",
     "generate",
     "generator",
     "openAPI"
@@ -26,11 +28,11 @@
   "author": "Eric Henry Correia",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/EricHenry/swagger-data-generator/issues"
+    "url": "https://github.com/EricHenry/swagger-data-gen/issues"
   },
-  "homepage": "https://github.com/EricHenry/swagger-data-generator#readme",
+  "homepage": "https://github.com/EricHenry/swagger-data-gen#readme",
   "bin": {
-    "swagger-data-gen": "lib/index"
+    "swagger-data-gen": "dist/index"
   },
   "dependencies": {
     "argparse": "^1.0.9",
