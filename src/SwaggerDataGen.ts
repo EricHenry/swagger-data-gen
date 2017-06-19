@@ -1,10 +1,11 @@
 import * as SwaggerParser from 'swagger-parser';
 import * as jsf from 'json-schema-faker';
 import * as faker from 'faker';
-import formatters from './formatters';
-import middleware from './middleware';
+import * as formatters from './formatters';
+import * as middleware from './middleware';
 import { configure, generateMock } from './utils';
-import { SwaggerObject, FormatterDescription, SDGMiddleware, DefaultConfig } from './types';
+import { FormatterDescription, SDGMiddleware, DefaultConfig } from './types';
+import { Spec as Swagger } from 'swagger-schema-official';
 
 jsf.extend('faker', () => faker);
 
@@ -35,7 +36,7 @@ const CORE_FORMATTERS: FormatterDescription[] = [formatters.binary, formatters.b
  */
 export class SwaggerDataGen {
   private _pathToFile: string;
-  private _parsedFile: SwaggerObject;
+  private _parsedFile: Swagger;
   private _middleware: SDGMiddleware[];
   private _formatters: FormatterDescription[];
 
@@ -150,15 +151,15 @@ export class SwaggerDataGen {
     this._formatters.forEach(({ formatName, callback }) => jsf.format(formatName, callback));
 
     return SwaggerParser.bundle(this._pathToFile)
-      .then((api: SwaggerObject) => {
+      .then((api: Swagger) => {
         this._middleware = configure(this._middleware, configMiddleware, CORE_MIDDLEWARE);
 
         let modifiedApi = Object.assign({}, api);
         this._middleware.forEach(m => modifiedApi = m(modifiedApi));
         return modifiedApi;
       })
-      .then((api: SwaggerObject) => SwaggerParser.dereference(api))
-      .then((api: SwaggerObject) => {
+      .then((api: Swagger) => SwaggerParser.dereference(api))
+      .then((api: Swagger) => {
         this._parsedFile = api;
         return api;
       })
@@ -175,10 +176,16 @@ export class SwaggerDataGen {
    * @memberOf SwaggerDataGenerator
    */
   generateMockData() {
+    const { definitions } = this._parsedFile;
+
+    if (!definitions) {
+      return {};
+    }
+
     return Object
       .keys(this._parsedFile.definitions)
       .reduce((mockData, def) => {
-        mockData[def] = SwaggerDataGen.generateMockData(this._parsedFile.definitions[def]);
+        mockData[def] = SwaggerDataGen.generateMockData(definitions[def]);
         return mockData;
       }, {});
   }

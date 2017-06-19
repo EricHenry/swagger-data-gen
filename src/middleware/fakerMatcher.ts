@@ -1,6 +1,6 @@
 import { memoize } from 'lodash';
 import * as faker from 'faker';
-import { SwaggerObject } from '../types';
+import { Spec as Swagger } from 'swagger-schema-official';
 
 const INVALID_FAKER_PROPS = [
   'definitions',
@@ -185,12 +185,12 @@ const addFakerToDefinition = (definition: any) => {
  * @returns {Object}        - an identical definition with the addition of a faker property
  *
  */
-export const fakerMatcher = (api: SwaggerObject): SwaggerObject => {
-  if (!Object.keys(api.definitions)) {
+export const fakerMatcher = (api: Swagger): Swagger => {
+  const { definitions } = api;
+
+  if (!definitions || !Object.keys(definitions).length) {
     throw new Error('To add faker values to the OpenAPI / Swagger file, it must have defnitions to parse');
   }
-
-  const { definitions } = api;
 
   const definitionsWithFakerValues = Object
     .keys(definitions)

@@ -1,10 +1,6 @@
-export type SwaggerObject = {
-  definitions: Object;
-  info: Object;
-  paths: Object;
-};
+import { Spec as Swagger } from 'swagger-schema-official';
 
-export type SDGMiddleware = (a: SwaggerObject) => SwaggerObject;
+export type SDGMiddleware = (a: Swagger) => Swagger;
 
 export type FormatterDescription = {
   formatName: string;
