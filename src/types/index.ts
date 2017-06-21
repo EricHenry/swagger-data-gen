@@ -1,32 +1,32 @@
 import { Spec as Swagger } from 'swagger-schema-official';
 
-export type SDGMiddleware = (a: Swagger) => Swagger;
+export type Middleware = (a: Swagger) => Swagger;
 
-export type FormatterDescription = {
+export type Formatter = {
   formatName: string;
   callback: Function;
 };
 
-export interface IConfigType {
-  all: boolean;
+export interface IConfigType<T> {
+  include?: (T | string)[];
+  exclude?: (T | string)[];
+  all?: boolean;
 }
 
-export interface FormatterConfig extends IConfigType {
-  binary: boolean;
-  byte: boolean;
-  fullDate: boolean;
-  password: boolean;
-  all: boolean;
+export interface FormatterConfig extends IConfigType<Formatter> {
+  binary?: boolean;
+  byte?: boolean;
+  fullDate?: boolean;
+  password?: boolean;
 }
 
-export interface MiddlewareConfig extends IConfigType {
-  fakerMatcher: boolean;
-  fakerDate: boolean;
-  requireProps: boolean;
-  all: boolean;
+export interface MiddlewareConfig extends IConfigType<Middleware> {
+  fakerMatcher?: boolean;
+  fakerDate?: boolean;
+  requireProps?: boolean;
 }
 
-export type DefaultConfig = {
-  formatters: FormatterConfig;
-  middleware: MiddlewareConfig;
+export type BuildOptions = {
+  formatters?: FormatterConfig;
+  middleware?: MiddlewareConfig;
 };

@@ -4,12 +4,12 @@ import * as faker from 'faker';
 import * as formatters from './formatters';
 import * as middleware from './middleware';
 import { configure, generateMock } from './utils';
-import { FormatterDescription, SDGMiddleware, DefaultConfig } from './types';
+import { Formatter, Middleware, BuildOptions } from './types';
 import { Spec as Swagger } from 'swagger-schema-official';
 
 jsf.extend('faker', () => faker);
 
-const DEFAULT_RUN_CONFIG: DefaultConfig = {
+const DEFAULT_RUN_CONFIG: BuildOptions = {
   // if this is set, it will override all other middleware config values. true will enable all, false will disable all
   formatters: {
     binary: true,
@@ -26,8 +26,8 @@ const DEFAULT_RUN_CONFIG: DefaultConfig = {
   }
 };
 
-const CORE_MIDDLEWARE: SDGMiddleware[] = [middleware.requireProps, middleware.fakerMatcher, middleware.fakerDate];
-const CORE_FORMATTERS: FormatterDescription[] = [formatters.binary, formatters.byte, formatters.fullDate, formatters.password];
+const CORE_MIDDLEWARE: Middleware[] = [middleware.requireProps, middleware.fakerMatcher, middleware.fakerDate];
+const CORE_FORMATTERS: Formatter[] = [formatters.binary, formatters.byte, formatters.fullDate, formatters.password];
 
 /**
  * Main hub in creating mock data from a OpenAPI / Swagger file
@@ -35,100 +35,8 @@ const CORE_FORMATTERS: FormatterDescription[] = [formatters.binary, formatters.b
  * @class SwaggerDataGenerator
  */
 export class SwaggerDataGen {
-  private _pathToFile: string;
-  private _parsedFile: Swagger;
-  private _middleware: SDGMiddleware[];
-  private _formatters: FormatterDescription[];
-
-  constructor(filePath: string | Object) {
-    if (typeof filePath !== 'string') {
-      throw new Error('Please provide a file path to the swagger document.');
-    }
-
-    this._pathToFile = filePath;
-    this._middleware = CORE_MIDDLEWARE;
-    this._formatters = CORE_FORMATTERS;
-  }
-
-  get middleware() {
-    return this._middleware;
-  }
-
-  get formatters() {
-    return this._formatters;
-  }
-
-  /**
-   * Add a middleware function to the list middleware that modify the api object
-   *
-   * @param {function} middleware - should accept the the api object and return an api object
-   * @returns {function}          - the function should be
-   *
-   * @memberOf SwaggerDataGenerator
-   */
-  registerMiddleware(middleware: SDGMiddleware) {
-    if (typeof middleware !== 'function') {
-      throw new Error('To register a middleware, please provide the function to add.');
-    }
-
-    this._middleware.push(middleware);
-    return middleware;
-  }
-
-  /**
-   * Removes the middleware function from the list of registered middleware
-   *
-   * @param {function} middleware - the function to remove from the middleware
-   *
-   * @memberOf SwaggerDataGenerator
-   */
-  deregisterMiddleWare(middleware: SDGMiddleware) {
-    if (typeof middleware !== 'function') {
-      throw new Error('To deregister a middleware, please provide the middleware function to remove.');
-    }
-
-    const middlewareLocation = this._middleware.findIndex(m => m === middleware);
-    this._middleware = this._middleware.splice(middlewareLocation, 1);
-  }
-
-  /**
-   * Adds a custom formatter to the list of formatters, which will eventually
-   *  be used to to set formatters in the JSON Schema Faker package
-   *
-   * @param {string} formatName - the format you want to add a custom generator for
-   * @param {function} callback - the function that will be passed to the JSON Schema Faker formatter
-   * @returns {object}          - an object describing the object that was just added, used to deregister the formatter at a later time
-   *
-   * @memberOf SwaggerDataGenerator
-   */
-  registerFomatter(formatName: string, callback: Function) {
-    if (typeof formatName !== 'string') {
-      throw new Error('To register a formatter, please provide a format name as a string.');
-    }
-    if (typeof callback !== 'function') {
-      throw new Error('To register a formatter, please provide a callback function to add');
-    }
-
-    const newFormatter = { formatName, callback };
-    this._formatters.push(newFormatter);
-    return newFormatter;
-  }
-
-  /**
-   * Removes the formatter function from the list of registered formatters
-   *
-   * @param {object} formatter - the formatter object to remove from the formatters list
-   *
-   * @memberOf SwaggerDataGenerator
-   */
-  deregisterFormatter(formatter: FormatterDescription) {
-    if (typeof middleware !== 'function') {
-      throw new Error('To deregister a formatter, please provide the formatter object to remove.');
-    }
-
-    const formatterLocation = this._formatters.findIndex(f => f === formatter);
-    this._formatters = this._formatters.splice(formatterLocation, 1);
-  }
+  private static _middleware: Middleware[] = CORE_MIDDLEWARE;
+  private static _formatters: Formatter[] = CORE_FORMATTERS;
 
   /**
    * Bundle the API,
@@ -142,15 +50,16 @@ export class SwaggerDataGen {
    *
    * @memberOf SwaggerDataGenerator
    */
-  run(config: DefaultConfig = DEFAULT_RUN_CONFIG) {
+  public static build(swaggerSchema: string | Swagger, config: BuildOptions = {}): Promise<Swagger> {
     const configFormatters = (config.formatters ? config.formatters : DEFAULT_RUN_CONFIG.formatters);
     const configMiddleware = (config.middleware ? config.middleware : DEFAULT_RUN_CONFIG.middleware);
+    const { formatters } = config;
 
     // apply any registered formatters
-    this._formatters = configure(this._formatters, configFormatters, CORE_FORMATTERS);
-    this._formatters.forEach(({ formatName, callback }) => jsf.format(formatName, callback));
+    SwaggerDataGen._formatters = configure(SwaggerDataGen._formatters, configFormatters, CORE_FORMATTERS);
+    SwaggerDataGen._formatters.forEach(({ formatName, callback }) => jsf.format(formatName, callback));
 
-    return SwaggerParser.bundle(this._pathToFile)
+    return SwaggerParser.bundle(swaggerSchema)
       .then((api: Swagger) => {
         this._middleware = configure(this._middleware, configMiddleware, CORE_MIDDLEWARE);
 
@@ -158,36 +67,11 @@ export class SwaggerDataGen {
         this._middleware.forEach(m => modifiedApi = m(modifiedApi));
         return modifiedApi;
       })
-      .then((api: Swagger) => SwaggerParser.dereference(api))
-      .then((api: Swagger) => {
-        this._parsedFile = api;
-        return api;
-      })
+      .then(api => SwaggerParser.dereference(api))
+      .then(api => api)
       .catch((err: Error) => {
         throw new Error(`Error has occured when trying to bundle and dereference the OpenAPI / Swagger object. \n Error: ${err}`);
       });
-  }
-
-  /**
-   * Generate mock data for all definitions in the Swagger / OpenAPI object
-   *
-   * @returns {object} - an object containing objects of mock data that represent all of the Swagger / OpenAPI definitions
-   *
-   * @memberOf SwaggerDataGenerator
-   */
-  generateMockData() {
-    const { definitions } = this._parsedFile;
-
-    if (!definitions) {
-      return {};
-    }
-
-    return Object
-      .keys(this._parsedFile.definitions)
-      .reduce((mockData, def) => {
-        mockData[def] = SwaggerDataGen.generateMockData(definitions[def]);
-        return mockData;
-      }, {});
   }
 
   /**
@@ -199,7 +83,14 @@ export class SwaggerDataGen {
    *
    * @memberOf SwaggerDataGenerator
    */
-  static generateMockData(schema: any) {
-    return generateMock(schema, jsf);
+  static generate(swaggerSchema: Swagger): any {
+    const { definitions = {} } = swaggerSchema;
+
+    return Object
+      .keys(definitions)
+      .reduce((mockData, def) => {
+        mockData[def] = generateMock(definitions[def], jsf);
+        return mockData;
+      }, {});
   }
 }
