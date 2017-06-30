@@ -1,16 +1,17 @@
-import { SwaggerObject } from '../types';
+import { Spec as Swagger } from 'swagger-schema-official';
+
 /**
  * Takes in a Swagger / OpenAPI object and attempts to modify the defintions
  *
  * @param {object} api  - an Swagger / OpenAPI object to parse
  * @returns {object}    - a new Swagger / OpenAPI object with an updated definitions property;
  */
-export const requireProps = (api: SwaggerObject): SwaggerObject => {
-  if (!Object.keys(api.definitions)) {
+export const requireProps = (api: Swagger): Swagger => {
+  const { definitions } = api;
+
+  if (!definitions || !Object.keys(definitions).length) {
     throw new Error('To add required properties to the OpenAPI / Swagger file, it must have defnitions to parse');
   }
-
-  const { definitions } = api;
 
   // Each definintion is update to require all of its properties.
   // each definition should require all of its properties, so that

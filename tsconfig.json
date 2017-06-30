@@ -2,7 +2,7 @@
   "compilerOptions": {
     "outDir": "./dist",        // path to output directory
     "baseUrl": ".",
-    "paths": {
+  "paths": {
       "*": [
           "./src/types/*"
       ]
@@ -19,7 +19,6 @@
     "noImplicitThis": true,
     "suppressImplicitAnyIndexErrors": true,
     "moduleResolution": "node",
-    "typeRoots": ["./node_modules/@types"],
     "lib": [
       "es5",
       "es2015",

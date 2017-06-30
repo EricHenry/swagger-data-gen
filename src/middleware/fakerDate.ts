@@ -1,4 +1,4 @@
-import { SwaggerObject } from '../types';
+import { Spec as Swagger } from 'swagger-schema-official';
 
 /**
  * Given a definition object (valid JSON Schema) add a faker property of 'date.recent'
@@ -27,12 +27,12 @@ function injectDateFaker(definition: any) {
  * @param {SwaggerObject} api  - an Swagger / OpenAPI object to parse
  * @returns {SwaggerObject}    - a new Swagger / OpenAPI object with an updated definitions property.
  */
-export const fakerDate = (api: SwaggerObject): SwaggerObject => {
-  if (!Object.keys(api.definitions)) {
+export const fakerDate = (api: Swagger): Swagger => {
+  const { definitions } = api;
+
+  if (!definitions || !Object.keys(api.definitions).length) {
     throw new Error('To add faker values to the OpenAPI / Swagger file, it must have defnitions to parse');
   }
-
-  const { definitions } = api;
 
   const newDefs = Object
     .keys(definitions)
