@@ -3,7 +3,9 @@ import * as jsf from 'json-schema-faker';
 import * as faker from 'faker';
 import * as formatters from './formatters';
 import * as middleware from './middleware';
-import { configureFormatters, configureMiddleWare, generateMock } from './utils';
+import { requireProps, fakerDate, fakerMatcher } from './middleware';
+import { binary, byte, fullDate, password } from './formatters';
+import { configure, generateData } from './utils';
 import { Formatter, Middleware, BuildOptions } from './types';
 import { Spec as Swagger } from 'swagger-schema-official';
 
@@ -13,8 +15,8 @@ jsf.extend('faker', () => faker);
 const DEFAULT_CONFIG_FORMATTER = { default: true };
 const DEFAULT_CONFIG_MIDDLEWARE = { default: true };
 
-const CORE_MIDDLEWARE: Middleware[] = [middleware.requireProps, middleware.fakerMatcher, middleware.fakerDate];
-const CORE_FORMATTERS: Formatter[] = [formatters.binary, formatters.byte, formatters.fullDate, formatters.password];
+export const CORE_MIDDLEWARE: Middleware[] = [requireProps, fakerMatcher, fakerDate];
+export const CORE_FORMATTERS: Formatter[] = [binary, byte, fullDate, password];
 
 /**
  * Bundle the API,
@@ -23,6 +25,7 @@ const CORE_FORMATTERS: Formatter[] = [formatters.binary, formatters.byte, format
  * dereference the Swagger / OpenAPI file / object
  * save the paresed file as an object property on the current instance of the SwaggerDataGenerator Class
  *
+ * @param {string} [swaggerSchema]   - the path to the Swagger file
  * @param {object} [config]          - Optional config to turn on / off base formatters and middleware
  * @returns {Promise<SwaggerObject>} - A promise that results in saving the paresed swagger file and returning that SwaggerObject
  *
@@ -30,23 +33,26 @@ const CORE_FORMATTERS: Formatter[] = [formatters.binary, formatters.byte, format
  */
 export function build(swaggerSchema: string | Swagger, config: BuildOptions = {}): Promise<Swagger> {
   const { formatters, middleware } = config;
-  const configFormatters = (formatters ? formatters : DEFAULT_CONFIG_FORMATTER);
-  const configMiddleware = (middleware ? middleware : DEFAULT_CONFIG_MIDDLEWARE);
+  const configurationF = (formatters ? formatters : DEFAULT_CONFIG_FORMATTER);
+  const configurationM = (middleware ? middleware : DEFAULT_CONFIG_MIDDLEWARE);
+
+  // create a registered array of formatters based on the configuration
+  const _formatters = configure(CORE_FORMATTERS, configurationF);
 
   // apply any registered formatters
-  const _formatters = configureFormatters(CORE_FORMATTERS, configFormatters);
   _formatters.forEach(({ formatName, callback }) => jsf.format(formatName, callback));
 
   return SwaggerParser.bundle(swaggerSchema)
     .then((api: Swagger) => {
-      const _middleware = configureMiddleware(CORE_MIDDLEWARE, configMiddleware);
-
+      // create a registered array of middleware based on the configuration
+      const _middleware = configure(CORE_MIDDLEWARE, configurationM);
       let modifiedApi = Object.assign({}, api);
+
+      //apply any registered middleware
       _middleware.forEach(m => modifiedApi = m(modifiedApi));
       return modifiedApi;
     })
-    .then(api => SwaggerParser.dereference(api))
-    .then(api => api)
+    .then((api: Swagger) => SwaggerParser.dereference(api))
     .catch((err: Error) => {
       throw new Error(`Error has occured when trying to bundle and dereference the OpenAPI / Swagger object. \n Error: ${err}`);
     });
@@ -67,7 +73,7 @@ export function generate(swaggerSchema: Swagger): any {
   return Object
     .keys(definitions)
     .reduce((mockData, def) => {
-      mockData[def] = generateMock(definitions[def], jsf);
+      mockData[def] = generateData(definitions[def], jsf);
       return mockData;
     }, {});
 }
@@ -78,8 +84,8 @@ export function generate(swaggerSchema: Swagger): any {
  * @class SwaggerDataGenerator
  */
 export default class SwaggerDataGen {
-  private static _middleware: Middleware[] = CORE_MIDDLEWARE;
-  private static _formatters: Formatter[] = CORE_FORMATTERS;
+  public static middleware: Middleware[] = CORE_MIDDLEWARE;
+  public static formatters: Formatter[] = CORE_FORMATTERS;
   public static build = build;
   public static generate  = generate;
 }

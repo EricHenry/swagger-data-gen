@@ -2,46 +2,29 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 var lodash_1 = require("lodash");
 /**
- *
+ * Creates an array of Type T's based on the configuration options passed.
+ *  the configuration options determine what should be included or excluded from the
+ *  returned array.
  *
  * @export
- * @param {any[]} values
- * @param {IConfigType} config
- * @param {any[]} core
- * @returns
+ * @param {T[]} core - the built in core values.
+ * @param {IConfigType<T>} config - the configuration options.
+ * @returns {T[]} - a new array with configured array
  */
-function configure(values, config, core) {
+function configure(core, config) {
     var newValues = [];
-    // if 'all' is true assume that none of 'core' were in the
-    // passed values array and check if there are any missing
-    // then add them in if they are
-    if (config.all === true) {
-        var missing = lodash_1.difference(core, values);
-        newValues = missing.concat(values);
-        return newValues;
+    // if default is true, add all the core values
+    if (config.default === true) {
+        newValues.concat(core);
     }
-    if (config.all === false) {
-        var removedCoreValues = lodash_1.difference(values, core);
-        return removedCoreValues;
+    // include any additional T's that are already not in the array
+    if (config.include && config.include.length > 0) {
+        newValues = lodash_1.union(newValues, config.include);
     }
-    newValues = values.slice();
-    Object.keys(config)
-        .filter(function (k) { return k === 'all'; }) // assume that the 'all' property is passed in as undefined
-        .forEach(function (k) {
-        if (config[k] === true) {
-            if (newValues.includes(core[k])) {
-                return;
-            }
-            newValues.push(core[k]);
-        }
-        if (config[k] === false) {
-            if (!newValues.includes(core[k])) {
-                return;
-            }
-            var listLocation = newValues.findIndex(core[k]);
-            newValues.splice(listLocation, 1);
-        }
-    });
+    // remove any value specified in exclude property
+    if (config.exclude && config.exclude.length > 0) {
+        newValues = lodash_1.without.apply(void 0, [newValues].concat(config.exclude));
+    }
     return newValues;
 }
 exports.configure = configure;

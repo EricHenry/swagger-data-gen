@@ -1,5 +1,3 @@
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
 /**
  * Take in a JSON schema and and generate mock data for it
  * @param schema {JSONSchema} - A valid json schema
@@ -7,8 +5,4 @@ Object.defineProperty(exports, "__esModule", { value: true });
  * @param options {} - TODO: allow for returning multiple mocks
  * @returns {object} - mock data
  */
-function generateMock(schema, jsf) {
-    return jsf(schema);
-}
-exports.generateMock = generateMock;
-//# sourceMappingURL=generateMock.js.map
+export declare function generateData(schema: any, jsf: any): any;

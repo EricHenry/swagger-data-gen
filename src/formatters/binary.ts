@@ -1,5 +1,5 @@
 import { random } from 'lodash';
-import { FormatterDescription } from '../types';
+import { Formatter } from '../types';
 
 /**
  * binary - creates a random binary string of 4 octets
@@ -28,4 +28,4 @@ function binary(): string {
   return binaryString;
 }
 
-export const binaryFormatter: FormatterDescription = { formatName: 'binary', callback: binary };
+export const binaryFormatter: Formatter = { formatName: 'binary', callback: binary };

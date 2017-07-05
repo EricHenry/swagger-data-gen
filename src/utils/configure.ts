@@ -1,66 +1,33 @@
-import { difference } from 'lodash';
-import { binary, byte, fullDate, password } from '../formatters';
-import { requireProps, fakerDate, fakerMatcher } from '../middleware';
-import { IConfigType, MiddlewareConfig, Middleware, FormatterConfig, Formatter } from '../types';
-
-const CORE_MIDDLEWARE: Middleware[] = [requireProps, fakerMatcher, fakerDate];
-const CORE_FORMATTERS: Formatter[] = [binary, byte, fullDate, password];
-
-export function configureMiddleware(values: Middleware[], config: MiddlewareConfig): Middleware[] {
-  return configure<Middleware>(values, config, CORE_MIDDLEWARE);
-}
-
-export function configureFormatters(values: Formatter[], config: FormatterConfig): Formatter[] {
-  return configure<Formatter>(values, config, CORE_FORMATTERS);
-}
+import { union, without } from 'lodash';
+import { IConfigType } from '../types';
 
 /**
- *
+ * Creates an array of Type T's based on the configuration options passed.
+ *  the configuration options determine what should be included or excluded from the
+ *  returned array.
  *
  * @export
- * @param {any[]} values
- * @param {IConfigType} config
- * @param {any[]} core
- * @returns
+ * @param {T[]} core - the built in core values.
+ * @param {IConfigType<T>} config - the configuration options.
+ * @returns {T[]} - a new array with configured array
  */
-function configure<T>(values: T[], config: IConfigType<T>, core: T[]): T[] {
+export function configure<T>(core: T[], config: IConfigType<T>): T[] {
   let newValues: any[] = [];
 
-  // if 'all' is true assume that none of 'core' were in the
-  // passed values array and check if there are any missing
-  // then add them in if they are
+  // if default is true, add all the core values
   if (config.default === true) {
-    const missing = difference(core, values);
-    newValues = missing.concat(values);
-    return newValues;
+    newValues.concat(core);
   }
 
-  if (config.default === false) {
-    const removedCoreValues = difference(values, core);
-    return removedCoreValues;
+  // include any additional T's that are already not in the array
+  if (config.include && config.include.length > 0) {
+    newValues = union(newValues, config.include);
   }
 
-  newValues = [...values];
-  Object.keys(config)
-    .filter(k => k === 'all') // assume that the 'all' property is passed in as undefined
-    .forEach(k => {
-      if (config[k] === true) {
-        if (newValues.includes(core[k])) {
-          return;
-        }
-
-        newValues.push(core[k]);
-      }
-
-      if (config[k] === false) {
-        if (!newValues.includes(core[k])) {
-          return;
-        }
-
-        let listLocation = newValues.findIndex(core[k]);
-        newValues.splice(listLocation, 1);
-      }
-    });
+  // remove any value specified in exclude property
+  if (config.exclude && config.exclude.length > 0) {
+    newValues = without(newValues, ...config.exclude);
+  }
 
   return newValues;
 }

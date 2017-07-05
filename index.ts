@@ -56,4 +56,3 @@ args = parser.parseArgs();
 
 build(args[INPUT_ARG])
   .then(api => saveOutput(generate(api)));
-

@@ -5,6 +5,6 @@
  * @param options {} - TODO: allow for returning multiple mocks
  * @returns {object} - mock data
  */
-export function generateMock(schema: any, jsf: any) {
+export function generateData(schema: any, jsf: any) {
   return jsf(schema);
 }

@@ -4,7 +4,7 @@ _This project is based on [booknds/swagger-data-generator](https://github.com/bo
 A command line interface (CLI) to generate mock test data from a Swagger Doc
 
 **_New_**:
- - Use this project in your code!
+ - Use this project in your code! (still in beta)
  - Tries its best to give you real looking data.
 
 ## Usage
@@ -31,22 +31,34 @@ Install:
 $: npm install -save swagger-data-gen
 ```
 
-Most simple use case
+Simplest use case
 ```ts
-import { SwaggerDataGen } from 'swagger-data-gen';
+// importing entire package
+import SwaggerDataGen from 'swagger-data-gen';
 
-const swaggerDataGenerator = new SwaggerDataGen('../path/to/swagger/doc.yml');
 let generatedData;
 
-swaggerDataGenerator.run(/* optional config here */)
-    .then(swaggerObject => {
-        // generate and save data
-        // use static method
+swaggerDataGenerator.build('./samples/PetStore.yaml')
+    .then((api: Swagger) => {
         generatedData = SwaggerDataGen.generateData(swaggerObject);
-
-        // or use method on the instatiated Object
-        generatedData = swaggerDataGenerator.generateData(swaggerObject);
     });
+
+// access genereated data by definition name on swagger doc
+const petData = generatedData.pet;
+
+//-----------------------------------------------------------------------------//
+// importing specific functions
+import { build, generate } from 'swagger-data-gen';
+
+let generatedData;
+
+build('./samples/Perscription.json')
+    .then((api: Swagger) => {
+        generatedData = generateData(swaggerObject);
+    });
+
+// access genereated data by definition name on swagger doc
+const customerData = generatedData.customer;
 ```
 
 ## Coming Soon

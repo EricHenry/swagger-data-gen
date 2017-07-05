@@ -1,4 +1,4 @@
-import { FormatterDescription } from '../types';
+import { Formatter } from '../types';
 
 /**
  * password   - generates a random password string
@@ -10,4 +10,4 @@ function password(gen: any): string {
   return gen.faker.internet.password();
 }
 
-export const passwordFormatter: FormatterDescription = { formatName: 'password', callback: password };
+export const passwordFormatter: Formatter = { formatName: 'password', callback: password };

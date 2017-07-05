@@ -7,10 +7,10 @@ Object.defineProperty(exports, "__esModule", { value: true });
  * @returns {object}    - a new Swagger / OpenAPI object with an updated definitions property;
  */
 exports.requireProps = function (api) {
-    if (!Object.keys(api.definitions)) {
+    var definitions = api.definitions;
+    if (!definitions || !Object.keys(definitions).length) {
         throw new Error('To add required properties to the OpenAPI / Swagger file, it must have defnitions to parse');
     }
-    var definitions = api.definitions;
     // Each definintion is update to require all of its properties.
     // each definition should require all of its properties, so that
     var newDef = Object.keys(definitions)

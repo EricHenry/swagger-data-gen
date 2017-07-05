@@ -5,22 +5,15 @@ Object.defineProperty(exports, "__esModule", { value: true });
 var fs = require("fs");
 var readline = require("readline");
 var argparse_1 = require("argparse");
-// const { ArgumentParser } = require('argparse');
-var SwaggerDataGenerator_1 = require("./src/SwaggerDataGenerator");
+var SwaggerDataGen_1 = require("./src/SwaggerDataGen");
+var INPUT_ARG = 'swagger-input';
+var OUTPUT_ARG = 'json-output';
 // grab expected user input
 var parser = new argparse_1.ArgumentParser({
     addHelp: true,
     description: 'Swagger Data Generator generates mock data from Swagger files.'
 });
 var args;
-parser.addArgument(['-y'], { help: 'Always overwrite output file (do not ask to overwrite)', action: 'storeTrue', dest: 'force-yes' });
-parser.addArgument(['swagger-input'], { help: 'Input Swagger file' });
-parser.addArgument(['json-output'], { help: 'Output file for generated mock data' });
-args = parser.parseArgs();
-var sdg = new SwaggerDataGenerator_1.SwaggerDataGenerator(args['swagger-input']);
-sdg
-    .run()
-    .then(function () { return saveOutput(sdg.generateMockData()); });
 /**
  * saveOutput - Verify output path and save file
  *
@@ -50,4 +43,10 @@ function saveOutput(generatedData) {
         });
     }
 }
+parser.addArgument(['-y'], { help: 'Always overwrite output file (do not ask to overwrite)', action: 'storeTrue', dest: 'force-yes' });
+parser.addArgument([INPUT_ARG], { help: 'Input Swagger file' });
+parser.addArgument([OUTPUT_ARG], { help: 'Output file for generated mock data' });
+args = parser.parseArgs();
+SwaggerDataGen_1.build(args[INPUT_ARG])
+    .then(function (api) { return saveOutput(SwaggerDataGen_1.generate(api)); });
 //# sourceMappingURL=index.js.map
