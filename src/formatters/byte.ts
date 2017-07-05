@@ -1,4 +1,4 @@
-import { FormatterDescription } from '../types';
+import { Formatter } from '../types';
 
 /**
  * Generates a random Base64 encoded character string
@@ -15,4 +15,4 @@ function byte(gen: any): string {
   return base64Encoded;
 }
 
-export const byteFormatter: FormatterDescription = { formatName: 'byte', callback: byte };
+export const byteFormatter: Formatter = { formatName: 'byte', callback: byte };

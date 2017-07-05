@@ -1,3 +1,3 @@
-export { configureMiddleware, configureFormatters } from './configure';
-export { generateMock } from './generateMock';
+export { configure } from './configure';
+export { generateData } from './generateData';
 export { levenshteinDistance } from './levenshteinDistance';

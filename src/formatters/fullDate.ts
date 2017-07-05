@@ -1,5 +1,5 @@
 import { random } from 'lodash';
-import { FormatterDescription } from '../types';
+import { Formatter } from '../types';
 
 /**
  * Generates a Date as a string in JSON Schema full-date format.
@@ -19,4 +19,4 @@ function fullDate(): string {
   return yearString + '-' + monthString + '-' + dayString;
 }
 
-export const fullDateFormatter: FormatterDescription = { formatName: 'fullDate', callback: fullDate };
+export const fullDateFormatter: Formatter = { formatName: 'fullDate', callback: fullDate };

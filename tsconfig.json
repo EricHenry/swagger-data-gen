@@ -2,9 +2,9 @@
   "compilerOptions": {
     "outDir": "./dist",        // path to output directory
     "baseUrl": ".",
-  "paths": {
+    "paths": {
       "*": [
-          "./src/types/*"
+        "./src/types/*"
       ]
     },
     "sourceMap": true,          // allow sourcemap support

@@ -27,10 +27,10 @@ function injectDateFaker(definition) {
  * @returns {SwaggerObject}    - a new Swagger / OpenAPI object with an updated definitions property.
  */
 exports.fakerDate = function (api) {
-    if (!Object.keys(api.definitions)) {
+    var definitions = api.definitions;
+    if (!definitions || !Object.keys(api.definitions).length) {
         throw new Error('To add faker values to the OpenAPI / Swagger file, it must have defnitions to parse');
     }
-    var definitions = api.definitions;
     var newDefs = Object
         .keys(definitions)
         .filter(function (def) { return !!definitions[def].properties; })

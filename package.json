@@ -2,15 +2,8 @@
   "name": "swagger-data-gen",
   "version": "0.2.0-beta.0",
   "description": "Generate mock data for a swagger document.",
-  "main": "dist/src/SwaggerDataGen",
-  "types": "dist/src/index",
-  "scripts": {
-    "test": "ava",
-    "build": "tsc -p .",
-    "start": "npm run build:live",
-    "build:live": "nodemon --exec ./node_modules/ts-node -- ./index.ts",
-    "dev": "./node_modules/ts-node -- ./index.ts"
-  },
+  "main": "./dist/src/SwaggerDataGen.js",
+  "types": "./dist/src/types/index.d.ts",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/EricHenry/swagger-data-gen.git"
@@ -32,24 +25,36 @@
   },
   "homepage": "https://github.com/EricHenry/swagger-data-gen#readme",
   "bin": {
-    "swagger-data-gen": "dist/index"
+    "swagger-data-gen": "./dist/index.js"
+  },
+  "scripts": {
+    "test": "ava",
+    "build": "tsc -p . && npm run uglify",
+    "uglify": "npm run uglify:bin && npm run uglify:main",
+    "uglify:bin": "uglifyjs ./dist/index.js --compress --mangle --output ./dist/index.min.js",
+    "uglify:main": "uglifyjs ./dist/src/SwaggerDataGen.js --compress --mangle --output ./dist/src/SwaggerDataGen.min.js ",
+    "start": "npm run build:live",
+    "build:live": "nodemon --exec ./node_modules/ts-node -- ./index.ts",
+    "dev": "./node_modules/ts-node -- ./index.ts"
   },
   "dependencies": {
-    "argparse": "^1.0.9",
-    "json-schema-faker": "^0.3.1",
-    "lodash": "^4.11.1",
-    "swagger-parser": "^3.4.1"
+    "argparse": "1.0.9",
+    "json-schema-faker": "0.3.1",
+    "lodash": "4.11.1",
+    "swagger-parser": "3.4.1"
   },
   "devDependencies": {
     "@types/argparse": "1.0.30",
     "@types/faker": "4.1.0",
     "@types/lodash": "4.14.64",
     "@types/node": "7.0.18",
+    "@types/swagger-parser": "4.0.1",
     "@types/swagger-schema-official": "2.0.5",
     "ava": "^0.14.0",
     "nodemon": "1.11.0",
     "ts-node": "3.0.4",
-    "typescript": "2.3.2"
+    "typescript": "2.3.2",
+    "uglify-js": "3.0.23"
   },
   "ava": {
     "files": [

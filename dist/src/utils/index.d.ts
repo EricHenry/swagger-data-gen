@@ -1,2 +1,3 @@
 export { configure } from './configure';
-export { generateMock } from './generateMock';
+export { generateData } from './generateData';
+export { levenshteinDistance } from './levenshteinDistance';

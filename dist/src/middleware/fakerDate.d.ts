@@ -1,4 +1,4 @@
-import { SwaggerObject } from '../types';
+import { Spec as Swagger } from 'swagger-schema-official';
 /**
  * Takes in a Swagger / OpenAPI object and attempts to modify the defintions.
  *  Each definition object that has a property(ies) with the word 'date' in it should
@@ -9,4 +9,4 @@ import { SwaggerObject } from '../types';
  * @param {SwaggerObject} api  - an Swagger / OpenAPI object to parse
  * @returns {SwaggerObject}    - a new Swagger / OpenAPI object with an updated definitions property.
  */
-export declare const fakerDate: (api: SwaggerObject) => SwaggerObject;
+export declare const fakerDate: (api: Swagger) => Swagger;

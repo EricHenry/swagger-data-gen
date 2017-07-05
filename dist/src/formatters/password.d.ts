@@ -1,2 +1,2 @@
-import { FormatterDescription } from '../types';
-export declare const passwordFormatter: FormatterDescription;
+import { Formatter } from '../types';
+export declare const passwordFormatter: Formatter;

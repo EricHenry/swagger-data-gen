@@ -1,2 +1,2 @@
-import { FormatterDescription } from '../types';
-export declare const byteFormatter: FormatterDescription;
+import { Formatter } from '../types';
+export declare const byteFormatter: Formatter;
