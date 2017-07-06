@@ -16,7 +16,7 @@ export function configure<T>(core: T[], config: IConfigType<T>): T[] {
 
   // if default is true, add all the core values
   if (config.default === true) {
-    newValues.concat(core);
+    newValues = newValues.concat(core);
   }
 
   // include any additional T's that are already not in the array

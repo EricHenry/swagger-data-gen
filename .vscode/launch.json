@@ -15,10 +15,10 @@
       "program": "${workspaceRoot}/index.ts",
       "args": [
         "-y",
-        "./samples/Perscription.json",
+        "./samples/PetStore.yaml",
         "./output3.json"
       ],
-      "outFiles": ["${workspaceRoot}/dist/*.js"]
+      "outFiles": ["${workspaceRoot}/dist/*.js", "${workspaceRoot}/dist/src/**/*.js"]
     },
     {
       "type": "node",

@@ -15,7 +15,7 @@ function configure(core, config) {
     var newValues = [];
     // if default is true, add all the core values
     if (config.default === true) {
-        newValues.concat(core);
+        newValues = newValues.concat(core);
     }
     // include any additional T's that are already not in the array
     if (config.include && config.include.length > 0) {
