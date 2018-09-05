@@ -43,6 +43,9 @@ function getFakerValues() {
  */
 var findClosestMatch = lodash_1.memoize(function (propName, fakerValues) {
     var propCosts = [];
+    if (propName.toLowerCase().endsWith('guid')) {
+        return { cost: 0, prop: propName, match: 'uuid' };
+    }
     // Map keys in fakerValues to an array of objects that
     // has the propName and associated distance cost
     for (var k in fakerValues) {
@@ -82,6 +85,7 @@ var addFakerToDefinition = function (definition) {
     // Now we will attempt to guess the closest faker match
     var propertiesCopy = Object.assign({}, definition.properties);
     var propsWithFaker = Object.keys(propertiesCopy)
+        .filter(function (k) { return !propertiesCopy[k]['$ref']; })
         .map(function (k) { return findClosestMatch(k, mappedFakerValues); })
         .filter(function (match) { return match.cost < COST_CAP; })
         .map(function (_a) {

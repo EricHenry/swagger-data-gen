@@ -1,0 +1,249 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "version": "v1",
+    "title": ""
+  },
+  "host": "",
+  "basePath": "/rest",
+  "schemes": [
+    "https"
+  ],
+  "paths": {
+    "/projects/{projectGuid}/projectproducts": {
+      "get": {
+        "tags": [
+          "ProjectProducts"
+        ],
+        "summary": "Get project products",
+        "description": "This is the same as organization's list of products, unless the project has some specific products and UseProductsFromSetting in project model is set to false.",
+        "operationId": "ProjectProducts_GetProjectProducts",
+        "consumes": [],
+        "produces": [
+          "application/json",
+          "text/json",
+          "application/xml",
+          "text/xml"
+        ],
+        "parameters": [
+          {
+            "name": "projectGuid",
+            "in": "path",
+            "description": "GUID of the project.",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "includeProductsFromRegistry",
+            "in": "query",
+            "required": false,
+            "type": "boolean"
+          },
+          {
+            "name": "firstRow",
+            "in": "query",
+            "description": "Optional: first row to fetch. Default 0 = first row.",
+            "required": false,
+            "type": "integer",
+            "format": "int32"
+          },
+          {
+            "name": "rowCount",
+            "in": "query",
+            "description": "Optional: How many rows to fetch, Default all.",
+            "required": false,
+            "type": "integer",
+            "format": "int32"
+          },
+          {
+            "name": "active",
+            "in": "query",
+            "description": "Fetch only active",
+            "required": false,
+            "type": "boolean"
+          },
+          {
+            "name": "textToSearch",
+            "in": "query",
+            "description": "Searched string: part of name or description",
+            "required": false,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/Rest.API.ProjectProductModel"
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "ProjectProducts"
+        ],
+        "summary": "Deletes all project products of a project",
+        "description": "Returns:\r\n No Content (204) if succeeded.",
+        "operationId": "ProjectProducts_DeleteAllProjectProducts",
+        "consumes": [],
+        "produces": [
+          "application/json",
+          "text/json"
+        ],
+        "parameters": [
+          {
+            "name": "projectGuid",
+            "in": "path",
+            "description": "GUID of the project from where project products to remove",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "required": [],
+              "type": "object"
+            }
+          }
+        }
+      }
+    },
+    "/projectproducts": {
+      "post": {
+        "tags": [
+          "ProjectProducts"
+        ],
+        "summary": "Adds a product to a project.",
+        "description": "",
+        "operationId": "ProjectProducts_PostProjectProduct",
+        "consumes": [
+          "application/json",
+          "text/json",
+          "application/xml",
+          "text/xml",
+          "application/x-www-form-urlencoded"
+        ],
+        "produces": [
+          "application/json",
+          "text/json",
+          "application/xml",
+          "text/xml"
+        ],
+        "parameters": [
+          {
+            "name": "projectProductModel",
+            "in": "body",
+            "description": "projectProductModel",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/Rest.API.ProjectProductModel"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/Rest.API.ProjectProductModel"
+            }
+          }
+        }
+      }
+    },
+    "/projectproducts/{guid}": {
+      "delete": {
+        "tags": [
+          "ProjectProducts"
+        ],
+        "summary": "Deletes a project product",
+        "description": "Returns:\r\n No Content (204) if succeeded.",
+        "operationId": "ProjectProducts_DeleteProjectProduct",
+        "consumes": [],
+        "produces": [
+          "application/json",
+          "text/json"
+        ],
+        "parameters": [
+          {
+            "name": "guid",
+            "in": "path",
+            "description": "GUID of the project product to remove",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "required": [],
+              "type": "object"
+            }
+          }
+        }
+      }
+    }
+  },
+  "definitions": {
+    "Rest.API.ProjectProductModel.ProductModel": {
+      "required": [
+        "guid"
+      ],
+      "type": "object",
+      "properties": {
+        "productCategory": {
+          "description": "Category of the product.",
+          "type": "string",
+          "readOnly": true
+        },
+        "productCode": {
+          "description": "Code of the product.",
+          "type": "string"
+        },
+        "productType": {
+          "description": "type of the product.",
+          "type": "string",
+          "readOnly": true
+        },
+        "isActive": {
+          "description": "Is the product active?",
+          "type": "boolean",
+          "readOnly": true
+        },
+        "guid": {
+          "type": "string"
+        },
+        "name": {
+          "type": "string",
+          "readOnly": true
+        }
+      }
+    },
+    "Rest.API.ProjectProductModel": {
+      "required": [
+        "projectGuid"
+      ],
+      "type": "object",
+      "properties": {
+        "guid": {
+          "type": "string"
+        },
+        "projectGuid": {
+          "description": "GUID of the project. \r\nRequired for post.",
+          "type": "string",
+          "readOnly": true
+        },
+        "product": {
+          "$ref": "#/definitions/Rest.API.ProjectProductModel.ProductModel",
+          "description": "GUID of the product. \r\nRequired for post."
+        }
+      }
+    }
+  }
+}

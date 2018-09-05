@@ -47,6 +47,9 @@ function getFakerValues() {
 const findClosestMatch = memoize((propName: string, fakerValues: any) => {
   const propCosts = [];
 
+  if (propName.toLowerCase().endsWith('guid')) {
+      return { cost: 0, prop: propName, match: 'uuid' };
+  }
   // Map keys in fakerValues to an array of objects that
   // has the propName and associated distance cost
   for (const k in fakerValues) {
@@ -94,6 +97,7 @@ const addFakerToDefinition = (definition: any) => {
   // Now we will attempt to guess the closest faker match
   const propertiesCopy = Object.assign({}, definition.properties);
   const propsWithFaker = Object.keys(propertiesCopy)
+    .filter(k => !propertiesCopy[k]['$ref'])
     .map(k => findClosestMatch(k, mappedFakerValues))
     .filter(match => match.cost < COST_CAP )
     .map(({ prop, match }) => (

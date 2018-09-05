@@ -39,9 +39,11 @@
   },
   "dependencies": {
     "argparse": "1.0.10",
+    "faker": "^4.1.0",
     "json-schema-faker": "0.5.0-rc15",
     "lodash": "4.17.10",
-    "swagger-parser": "5.0.5"
+    "swagger-parser": "5.0.5",
+    "swagger-schema-official": "^2.0.0-bab6bed"
   },
   "devDependencies": {
     "@types/argparse": "1.0.34",
