@@ -27,7 +27,7 @@ function getFakerValues() {
   return Object.keys(faker)
     .filter(k => !INVALID_FAKER_PROPS.includes(k))
     .reduce((res, k) => {
-      const subKeys = Object.keys(faker[k]) || {};
+      const subKeys = Object.keys(faker[k] || {});
       subKeys.forEach(sk => res[sk] = k);
       return res;
     }, {});
