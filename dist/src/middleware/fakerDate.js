@@ -28,7 +28,7 @@ function injectDateFaker(definition) {
  */
 exports.fakerDate = function (api) {
     var definitions = api.definitions;
-    if (!definitions || !Object.keys(api.definitions).length) {
+    if (!definitions || !Object.keys(definitions).length) {
         throw new Error('To add faker values to the OpenAPI / Swagger file, it must have defnitions to parse');
     }
     var newDefs = Object

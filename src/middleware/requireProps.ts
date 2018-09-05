@@ -1,4 +1,4 @@
-import { Spec as Swagger } from 'swagger-schema-official';
+import { Spec as Swagger, Schema } from 'swagger-schema-official';
 
 /**
  * Takes in a Swagger / OpenAPI object and attempts to modify the defintions
@@ -18,7 +18,7 @@ export const requireProps = (api: Swagger): Swagger => {
   const newDef = Object.keys(definitions)
     .filter(def => !!definitions[def].properties)
     .reduce((res, def) => {
-      const required = Object.keys(definitions[def].properties);
+      const required = Object.keys(definitions[def].properties as Schema);
       res[def] = Object.assign({}, definitions[def], { required });
       return res;
     }, {});

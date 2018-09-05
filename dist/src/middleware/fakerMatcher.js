@@ -2,7 +2,7 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 var lodash_1 = require("lodash");
 var faker = require("faker");
-var _1 = require("../utils/");
+var utils_1 = require("../utils/");
 var INVALID_FAKER_PROPS = [
     'definitions',
     'fake',
@@ -47,7 +47,7 @@ var findClosestMatch = lodash_1.memoize(function (propName, fakerValues) {
     // has the propName and associated distance cost
     for (var k in fakerValues) {
         if (fakerValues.hasOwnProperty(k)) {
-            var cost = _1.levenshteinDistance(k, propName);
+            var cost = utils_1.levenshteinDistance(k, propName);
             var propCost = { cost: cost, prop: propName, match: k };
             // cost of 0 means an exact match
             // dont continue if we have an exact match
@@ -86,13 +86,13 @@ var addFakerToDefinition = function (definition) {
         .filter(function (match) { return match.cost < COST_CAP; })
         .map(function (_a) {
         var prop = _a.prop, match = _a.match;
+        var _b;
         return (_b = {},
             _b[prop] = {
                 faker: mappedFakerValues[match] + "." + match
             },
             _b.prop = prop,
             _b);
-        var _b;
     })
         .reduce(function (res, faker) {
         res[faker.prop] = Object.assign({}, res[faker.prop], propertiesCopy[faker.prop], faker[faker.prop]);

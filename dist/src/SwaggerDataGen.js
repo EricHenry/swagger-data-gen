@@ -76,14 +76,14 @@ exports.generate = generate;
  *
  * @class SwaggerDataGenerator
  */
-var SwaggerDataGen = (function () {
+var SwaggerDataGen = /** @class */ (function () {
     function SwaggerDataGen() {
     }
+    SwaggerDataGen.middleware = exports.CORE_MIDDLEWARE;
+    SwaggerDataGen.formatters = exports.CORE_FORMATTERS;
+    SwaggerDataGen.build = build;
+    SwaggerDataGen.generate = generate;
     return SwaggerDataGen;
 }());
-SwaggerDataGen.middleware = exports.CORE_MIDDLEWARE;
-SwaggerDataGen.formatters = exports.CORE_FORMATTERS;
-SwaggerDataGen.build = build;
-SwaggerDataGen.generate = generate;
 exports.default = SwaggerDataGen;
 //# sourceMappingURL=SwaggerDataGen.js.map
