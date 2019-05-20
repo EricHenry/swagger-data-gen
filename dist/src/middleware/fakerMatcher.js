@@ -89,8 +89,8 @@ var addFakerToDefinition = function (definition) {
         .map(function (k) { return findClosestMatch(k, mappedFakerValues); })
         .filter(function (match) { return match.cost < COST_CAP; })
         .map(function (_a) {
-        var prop = _a.prop, match = _a.match;
         var _b;
+        var prop = _a.prop, match = _a.match;
         return (_b = {},
             _b[prop] = {
                 faker: mappedFakerValues[match] + "." + match
